@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/cs378-p4/static/css/main.cd306195.css",
+    "main.js": "/cs378-p4/static/js/main.af18d689.js",
+    "static/js/453.8d0f8901.chunk.js": "/cs378-p4/static/js/453.8d0f8901.chunk.js",
+    "static/media/recipelogo.png": "/cs378-p4/static/media/recipelogo.86e8ab10dff17bd9a030.png",
+    "index.html": "/cs378-p4/index.html",
+    "main.cd306195.css.map": "/cs378-p4/static/css/main.cd306195.css.map",
+    "main.af18d689.js.map": "/cs378-p4/static/js/main.af18d689.js.map",
+    "453.8d0f8901.chunk.js.map": "/cs378-p4/static/js/453.8d0f8901.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.cd306195.css",
+    "static/js/main.af18d689.js"
+  ]
+}

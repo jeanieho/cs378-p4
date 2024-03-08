@@ -11,17 +11,41 @@ const App = () => {
   const [recipes, setRecipes] = useState([]);
   const [search, setSearch] = useState('');
   const [query, setQuery] = useState('popular');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     getRecipes();
   }, [query]);
 
   const getRecipes = async () => {
-    const response = await fetch(
-      `https://api.edamam.com/search?q=${query}&app_id=${APP_ID}&app_key=${APP_KEY}&from=0&to=12`
-    );
-    const data = await response.json();
-    setRecipes(data.hits);
+    try {
+      const response = await fetch(
+        `https://api.edamam.com/search?q=${query}&app_id=${APP_ID}&app_key=${APP_KEY}&from=0&to=12`
+      );
+      const data = await response.json();
+
+      if (data.hits.length === 0) {
+        setError(`Recipes for "${query}" not found!`);
+        setRecipes([]);
+      } else {
+        setError('');
+        const formattedRecipes = data.hits.map((recipe) => {
+          return {
+            title: recipe.recipe.label,
+            calories: Math.round(recipe.recipe.calories),
+            image: recipe.recipe.image,
+            ingredients: recipe.recipe.ingredients,
+            protein: recipe.recipe.totalNutrients.PROCNT.quantity,
+            fat: recipe.recipe.totalNutrients.FAT.quantity,
+            carb: recipe.recipe.totalNutrients.CHOCDF.quantity,
+          };
+        });
+        setRecipes(formattedRecipes);
+      }
+    } catch (error) {
+      setError('Error fetching recipes. Please try again.');
+      console.error('Error fetching recipes:', error);
+    }
   };
 
   const updateSearch = (e) => {
@@ -62,14 +86,19 @@ const App = () => {
         <button onClick={() => handleCuisineClick('japanese')}>Japanese</button>
         <button onClick={() => handleCuisineClick('korean')}>Korean</button>
       </div>
+      {error && <p className="error-message">{error}</p>}
       <div className="recipes">
         {recipes.map((recipe) => (
           <Recipe
-            key={recipe.recipe.label}
-            title={recipe.recipe.label}
-            calories={recipe.recipe.calories}
-            image={recipe.recipe.image}
-            ingredients={recipe.recipe.ingredients}
+            key={recipe.title}
+            title={recipe.title}
+            calories={recipe.calories}
+            image={recipe.image}
+            ingredients={recipe.ingredients}
+            protein={recipe.protein}
+            fat={recipe.fat}
+            carb={recipe.carb}
+            error={error}
           />
         ))}
       </div>

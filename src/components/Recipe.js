@@ -1,6 +1,7 @@
 // Recipe.js
 import React, { useState } from 'react';
 import { Line } from 'react-chartjs-2';
+import Chart from 'chart.js/auto';
 
 const Recipe = ({ title, calories, image, ingredients, protein, fat, carb }) => {
   const [showIngredients, setShowIngredients] = useState(false);
@@ -9,37 +10,66 @@ const Recipe = ({ title, calories, image, ingredients, protein, fat, carb }) => 
     setShowIngredients(!showIngredients);
   };
 
-  // Calculate the percentage of calories contributed by each nutrient
-  const proteinPercentage = (protein / calories) * 100;
-  const fatPercentage = (fat / calories) * 100;
-  const carbsPercentage = (carb / calories) * 100;
+  const [showGraph, setShowGraph] = useState(false);
 
-  // Define data for the line graph
+  const toggleGraph = () => {
+    setShowGraph(!showGraph);
+  };
+
+  const proteinCalories = protein * 4;
+  const fatCalories = fat * 9;
+  const carbsCalories = carb * 4;
+
   const chartData = {
     labels: ['Protein', 'Fat', 'Carbs'],
     datasets: [
       {
-        label: 'Caloric Breakdown',
-        data: [proteinPercentage, fatPercentage, carbsPercentage],
+        label: 'Calories from Each Macro',
+        data: [proteinCalories, fatCalories, carbsCalories],
         fill: false,
         borderColor: 'rgba(75,192,192,1)',
       },
     ],
   };
 
+  const chartOptions = {
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          callback: function (value) {
+            return value + ' kcal';
+          },
+        },
+      },
+    },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            return context.parsed.y.toFixed(2) + ' kcal';
+          },
+        },
+      },
+    },
+  };
+
   return (
     <div className="recipe">
       <img src={image} alt={title} />
       <h2>{title}</h2>
-      <p>Calories: {Math.round(calories)}</p>
+      <p>{Math.round(calories)} kcal / serving</p>
 
-      {/* Line graph for caloric breakdown */}
-      <Line data={chartData} />
+      <button onClick={toggleGraph}>Macros</button>
+      {showGraph && (
+        <div style={{ paddingTop: '3%' }}>
+          <Line data={chartData} options={chartOptions} />
+        </div>      
+      )}
 
-      {/* Button to toggle ingredients visibility */}
-      <button onClick={toggleIngredients}>Show Ingredients</button>
+      <div style={{ marginBottom: '5%' }}></div>
 
-      {/* Display ingredients if showIngredients is true */}
+      <button onClick={toggleIngredients}>Ingredients</button>
       {showIngredients && (
         <ul>
           {ingredients.map((ingredient, index) => (

@@ -46,7 +46,7 @@ body {
 }
 
 .cuisine-buttons {
-  padding-bottom: 5%;
+  padding-bottom: 4.5%;
 }
 
 .cuisine-buttons button {
@@ -79,3 +79,11 @@ body {
 .chart-container {
   margin-top: 20px;
 }
+
+.search-button,
+.cuisine-buttons button,
+.recipe button {
+  background-color: #80a4c0;
+  color: #fff;
+}
+

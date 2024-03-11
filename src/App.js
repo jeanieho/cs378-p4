@@ -10,7 +10,7 @@ const App = () => {
 
   const [recipes, setRecipes] = useState([]);
   const [search, setSearch] = useState('');
-  const [query, setQuery] = useState('popular');
+  const [query, setQuery] = useState('easy');
   const [error, setError] = useState('');
 
   useEffect(() => {
